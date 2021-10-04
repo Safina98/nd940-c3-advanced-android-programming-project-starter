@@ -33,17 +33,9 @@ import com.udacity.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
-    private val PERMISSION_REQUEST_CODE = 200
-    private val REQUEST_CODE = 0
     private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
     private lateinit var downloadManager: DownloadManager
-    private  var status_string:String = "Download Failed"
     private var filename:String="null"
-
-    //private val notifyIntent = Intent(, AlarmReceiver::class.java)
-    private val  notifyIntent = Intent(this, DetailActivity::class.java)
 private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

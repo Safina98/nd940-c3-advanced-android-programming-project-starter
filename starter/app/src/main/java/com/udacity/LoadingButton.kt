@@ -21,8 +21,8 @@ class LoadingButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     private var widthSize = 0
     private var heightSize = 0
-    private var valueAnimator = ValueAnimator()
-    private var valueAnimator2 = ValueAnimator()
+    private var valueAnimatorCircle = ValueAnimator()
+    private var valueAnimatorRect = ValueAnimator()
     private var radius = 0.0f                   // Radius of the circle.
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -33,13 +33,12 @@ class LoadingButton @JvmOverloads constructor(
     var value = 0f
     var sweepAngle = 0f
     var angle = -360.2f
-    var width = 0f
 
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when(new) {
-            ButtonState.Loading -> {// ButtonState.Loading
+            ButtonState.Loading -> {
                 isClickable = false
-                valueAnimator = ValueAnimator.ofFloat(0.0f,
+                valueAnimatorCircle = ValueAnimator.ofFloat(0.0f,
                         measuredWidth.toFloat())
                         .setDuration(4000)
                         .apply {
@@ -50,25 +49,21 @@ class LoadingButton @JvmOverloads constructor(
                                 repeatMode = ValueAnimator.RESTART
                                 interpolator = AccelerateInterpolator(1f)
                                 invalidate()
-
                             }
                         }
-                valueAnimator2 = ValueAnimator.ofFloat(0.0f,
+                valueAnimatorRect = ValueAnimator.ofFloat(0.0f,
                         measuredWidth.toFloat())
                         .setDuration(2000)
                         .apply {
                             addUpdateListener { valueAnimator ->
                                 value = valueAnimator.animatedValue as Float
-                               // sweepAngle = value *1.125f
                                 repeatCount = ValueAnimator.INFINITE
                                 repeatMode = ValueAnimator.REVERSE
-
                                 invalidate()
-
                             }
                         }
-                valueAnimator2.start()
-                valueAnimator.start()
+                valueAnimatorRect.start()
+                valueAnimatorCircle.start()
             }
             ButtonState.Completed ->{
                 ButtonState.Completed
@@ -106,24 +101,19 @@ class LoadingButton @JvmOverloads constructor(
                 paint.color = ContextCompat.getColor(context, R.color.colorAccent)
                 canvas.drawCircle(widthSize-2*radius,radius+11.25f,radius,paint)
 
-
-              //  Log.i("angle", " angle : $angle")
-                //Log.i("angle", " sweepangle-360: "+(sweepAngle - 360).toString())
                 if (angle<=(sweepAngle-360)) {
                     paint.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
                     angle = (sweepAngle - 360).absoluteValue
-                    //Log.i("angle", " : $angle")
-                    //Log.i("angle", " sweepangle-360: "+(sweepAngle - 360).toString())
                     canvas.drawArc((widthSize - radius * 3).toFloat(), 11.25f, (widthSize - radius).toFloat(), heightSize.toFloat() - 11.25f, 0f, angle, true, paint)
                 }else angle = -360f
             }
 
             paint.color = Color.GRAY
-            canvas.drawText("LOADING...",(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
+            canvas.drawText(resources.getString(R.string.button_loading),(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
         }
         else if(buttonState ==ButtonState.Completed) {
             paint.color = Color.WHITE
-            canvas.drawText("DOWNLOAD",(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
+            canvas.drawText(resources.getString(R.string.notification_channel_name),(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
         }else{ Color.YELLOW}
         paint.color = context.getColor(R.color.colorPrimary)
     }

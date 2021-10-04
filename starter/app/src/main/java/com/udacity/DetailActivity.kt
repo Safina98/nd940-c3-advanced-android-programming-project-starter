@@ -22,11 +22,9 @@ private lateinit var binding: ActivityDetailBinding
         val filename_ = intent.getStringExtra("filename")
         val notificationManager = ContextCompat.getSystemService(this, NotificationManager::class.java) as NotificationManager
         notificationManager.cancelNotifications()
-        val status = findViewById<TextView>(R.id.textView)
-        val filename = findViewById<TextView>(R.id.fileName)
+        binding.textView.text = "status is: "+status_
+        binding.fileName.text = " File name: $filename_"
 
-        status.text = "status is: "+status_
-        filename.text =" File name: $filename_"
 
         binding.motionLayoutDetail.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {

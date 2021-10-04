@@ -3,12 +3,18 @@
     <string name="app_description">Download files from Internet</string>
     <string name="action_settings">Settings</string>
 
-
     <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
     <string name="notification_description">The Project 3 repository is downloaded</string>
-    <string name="notification_button">See changes</string>
+    <string name="notification_button">See Detail</string>
+    <string name="notification_channel_name">Download</string>
+
+    <string name="download_success">Download Success</string>
+    <string name="download_failed">Download Failed</string>
 
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="radio1_glide_text">Glide-Image Loading Library by Bump Tech<a href="https://github.com/bumptech/glide.git"></a></string>
+    <string name="radio2_loadapp_text">Load App-Current Repository  by Udacity <a href="https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter.git"></a></string>
+    <string name="radio3_retrofit_text">Retrofit-Type-safe HTTP client for Android and Java by Square, Inc <a href="https://github.com/square/retrofit.git"></a></string>
 </resources>

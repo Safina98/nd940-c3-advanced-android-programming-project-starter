@@ -17,7 +17,7 @@
     </style>
     <style name="WindowAnimationStyle">
         <item name="android:windowEnterAnimation">@android:anim/linear_interpolator</item>
-        <item name="android:windowExitAnimation">@android:anim/linear_interpolator</item>
+
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

@@ -2,5 +2,14 @@
 <resources>
     <declare-styleable name="LoadingButton">
 <!--   TODO: create custom attributes for the view-->
+
+        <attr name="buttonLabel" format="enum">
+            <enum name="Download" value="0"/>
+            <enum name="Downloading" value="1"/>
+        </attr>
+        <attr name="textDownload" format="string" />
+        <attr name="textDownloading" format="string" />
+        <attr name="bgColor1" format="color" />
+        <attr name="bgColor2" format="color" />
     </declare-styleable>
 </resources>

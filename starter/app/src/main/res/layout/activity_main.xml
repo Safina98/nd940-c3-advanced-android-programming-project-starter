@@ -49,7 +49,12 @@
                     android:layout_margin="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:textDownload="@string/notification_channel_name"
+                    app:textDownloading="@string/button_loading"
+                    app:bgColor1="@color/colorPrimary"
+                    app:bgColor2="@color/colorPrimaryDark"
+                    />
 
                 <RadioGroup
                     android:id="@+id/radio_group"

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.withStyledAttributes
 import java.lang.Math.min
 import kotlin.math.absoluteValue
 import kotlin.properties.Delegates
@@ -19,6 +20,11 @@ private const val START_ANGLE = 225f
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    private var loadingButtonCompleteColor = 0
+    private var loadingButtonLoadingColor = 0
+    //private var textPos = 0
+    private var textDownload=""
+    private var textDownloading =""
     private var widthSize = 0
     private var heightSize = 0
     private var valueAnimatorCircle = ValueAnimator()
@@ -30,9 +36,9 @@ class LoadingButton @JvmOverloads constructor(
         textSize = 45.0f
         typeface = Typeface.create( "", Typeface.BOLD)
     }
-    var value = 0f
-    var sweepAngle = 0f
-    var angle = -360.2f
+    private var value = 0f
+    private var sweepAngle = 0f
+    private var angle = -360.2f
 
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when(new) {
@@ -73,10 +79,17 @@ class LoadingButton @JvmOverloads constructor(
         }
     }
 
-
     init {
         isClickable = true
         buttonState = ButtonState.Completed
+        context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
+            loadingButtonCompleteColor = getColor(R.styleable.LoadingButton_bgColor1, 0)
+            loadingButtonLoadingColor = getColor(R.styleable.LoadingButton_bgColor2, 0)
+            textDownload = getText(R.styleable.LoadingButton_textDownload).toString()
+            textDownloading = getText(R.styleable.LoadingButton_textDownloading).toString()
+
+//            textDownloading = getInteger(R.styleable.LoadingButton_textDownloading, 0)
+        }
 
     }
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
@@ -84,40 +97,36 @@ class LoadingButton @JvmOverloads constructor(
     }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        //canvas.drawColor(ContextCompat.getColor(context,R.color.colorPrimary))
+        canvas.drawColor(loadingButtonCompleteColor)
+        when (buttonState) {
+            ButtonState.Loading -> {
 
-        canvas.drawColor(ContextCompat.getColor(context,R.color.colorPrimary))
-        if (buttonState == ButtonState.Loading) {
-          //  canvas.drawColor(ContextCompat.getColor(context,R.color.colorPrimaryDark))
-            paint.color = ContextCompat.getColor(context,R.color.colorPrimaryDark)
-          canvas.drawRect(value,0f,widthSize.toFloat(),heightSize.toFloat(),paint)
-            //paint.color = ContextCompat.getColor(context, R.color.colorAccent)
-            //canvas.drawArc((widthSize-radius*3).toFloat(),11.25f,(widthSize-radius).toFloat(),heightSize.toFloat()-11.25f,0f,sweepAngle,true,paint)
-            if (sweepAngle<=359){
-              paint.color = ContextCompat.getColor(context, R.color.colorAccent)
-                canvas.drawArc((widthSize-radius*3).toFloat(),11.25f,(widthSize-radius).toFloat(),heightSize.toFloat()-11.25f,0f,sweepAngle,true,paint)
-               // angle = sweepAngle
-               // Log.i("angle", " sweepangle-360: "+(sweepAngle - 360).toString())
-            }else{
-                paint.color = ContextCompat.getColor(context, R.color.colorAccent)
-                canvas.drawCircle(widthSize-2*radius,radius+11.25f,radius,paint)
-
-                if (angle<=(sweepAngle-360)) {
-                    paint.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
-                    angle = (sweepAngle - 360).absoluteValue
-                    canvas.drawArc((widthSize - radius * 3).toFloat(), 11.25f, (widthSize - radius).toFloat(), heightSize.toFloat() - 11.25f, 0f, angle, true, paint)
-                }else angle = -360f
+                paint.color = loadingButtonLoadingColor
+                canvas.drawRect(value,0f,widthSize.toFloat(),heightSize.toFloat(),paint)
+                if (sweepAngle<=359){
+                    paint.color = ContextCompat.getColor(context, R.color.colorAccent)
+                    canvas.drawArc((widthSize-radius*3).toFloat(),11.25f,(widthSize-radius).toFloat(),heightSize.toFloat()-11.25f,0f,sweepAngle,true,paint)
+                }else{
+                    paint.color = ContextCompat.getColor(context, R.color.colorAccent)
+                    canvas.drawCircle(widthSize-2*radius,radius+11.25f,radius,paint)
+                    if (angle<=(sweepAngle-360)) {
+                        paint.color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
+                        angle = (sweepAngle - 360).absoluteValue
+                        canvas.drawArc((widthSize - radius * 3), 11.25f, (widthSize - radius), heightSize.toFloat() - 11.25f, 0f, angle, true, paint)
+                    }else angle = -360f
+                }
+                paint.color = Color.GRAY
+                canvas.drawText(textDownloading,(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
             }
-
-            paint.color = Color.GRAY
-            canvas.drawText(resources.getString(R.string.button_loading),(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
+            ButtonState.Completed -> {
+                paint.color = Color.WHITE
+                canvas.drawText(textDownload,(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
+            }
+            else -> { Color.YELLOW}
         }
-        else if(buttonState ==ButtonState.Completed) {
-            paint.color = Color.WHITE
-            canvas.drawText(resources.getString(R.string.notification_channel_name),(widthSize/2).toFloat(), (heightSize-55).toFloat(),paint)
-        }else{ Color.YELLOW}
         paint.color = context.getColor(R.color.colorPrimary)
     }
-
        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minw: Int = paddingLeft + paddingRight + suggestedMinimumWidth
         val w: Int = resolveSizeAndState(minw, widthMeasureSpec, 1)
